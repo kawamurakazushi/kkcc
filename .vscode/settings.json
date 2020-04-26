@@ -2,6 +2,7 @@
   "files.associations": {
     "atomic": "c",
     "locale": "c",
-    "__node_handle": "c"
+    "__node_handle": "c",
+    "__locale": "c"
   }
 }

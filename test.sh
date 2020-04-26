@@ -47,7 +47,8 @@ assert 1 '1>=0;'
 assert 1 '1>=1;'
 assert 0 '1>=2;'
 
-assert 8 '8;'
-assert 8 'a=1;'
+assert 1 'a=1;'
+assert 3 'a=3;'
+assert 50 'd=20+10*3;'
 
 echo OK

@@ -205,3 +205,69 @@ Node *parse(Token *token)
   Node *node = stmt(&token, token);
   return node;
 }
+
+// test
+static void check(Node *node)
+{
+  if (node->kind == ND_NUM)
+  {
+    printf("NUM: %d\n",node->val);
+    return;
+  }
+
+  if (node->kind == ND_LVAR)
+  {
+    printf("VAR: offset %d\n", node->offset);
+    return;
+  }
+
+  check(node->lhs);
+  check(node->rhs);
+
+  switch (node->kind)
+  {
+  case ND_ADD:
+    printf("ND_ADD\n");
+    break;
+  case ND_SUB:
+    printf("ND_SUB\n");
+    break;
+  case ND_MUL:
+    printf("ND_MUL\n");
+    break;
+  case ND_DIV:
+    printf("ND_DIV\n");
+    break;
+  case ND_EQ:
+    printf("ND_EQ\n");
+    break;
+  case ND_NE:
+    printf("ND_NE\n");
+    break;
+  case ND_LT:
+    printf("ND_LT\n");
+    break;
+  case ND_LE:
+    printf("ND_LE\n");
+    break;
+  case ND_LVAR:
+    printf("ND_LVAR\n");
+    break;
+  case ND_ASSIGN:
+    printf("ND_ASSIGN\n");
+    break;
+  case ND_NUM:
+    printf("ND_NUM\n");
+    break;
+  }
+
+  printf("-- Done\n");
+}
+
+
+void test_parse()
+{
+  printf("\n-- Testing parse\n");
+  Node *node = parse(tokenize("c=8;"));
+  check(node);
+}

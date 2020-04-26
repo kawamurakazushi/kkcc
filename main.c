@@ -18,9 +18,9 @@ int main(int argc, char **argv)
   {
     printf("Running Test.....");
     test_tokenize();
+    test_parse();
     return 0;
   }
-  return 0;
 
   Token *token = tokenize(argv[1]);
   comment_token(token);

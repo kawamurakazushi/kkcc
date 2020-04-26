@@ -32,6 +32,8 @@ long get_number(Token *token);
 Token *tokenize(char *p);
 void test_tokenize();
 
+void error(char *fmt, ...);
+
 // parse.c
 
 typedef enum
@@ -60,6 +62,7 @@ struct Node
 };
 
 Node *parse(Token *tok);
+void test_parse();
 
 // codegen.c
 
