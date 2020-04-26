@@ -38,8 +38,8 @@ static void gen(Node *node)
     gen(node->rhs);      // stackに式の演算結果を保存する
 
     comment("Assigning");
-    printf("  pop rdi\n");       // stackから式演算結果をrdiに格納
-    printf("  pop rax\n");       // 変数のアドレスをraxに格納
+    printf("  pop rdi\n");        // stackから式演算結果をrdiに格納
+    printf("  pop rax\n");        // 変数のアドレスをraxに格納
     printf("  mov [rax], rdi\n"); // raxのアドレスに、rdiの値を格納
     printf("  push rdi\n");
     return;
@@ -118,9 +118,12 @@ void codegen(Node *node)
   printf("  mov rbp, rsp\n");
   printf("  sub rsp, 208\n");
 
-  gen(node);
-  comment("Pop result to RAX");
-  printf("  pop rax\n");
+  for (Node *n = node; n; n = n->next)
+  {
+    gen(n);
+    comment("Pop result to RAX");
+    printf("  pop rax\n");
+  }
 
   comment("Reset rsp");
   printf("  mov rsp, rbp\n");

@@ -55,6 +55,7 @@ typedef struct Node Node;
 struct Node
 {
   NodeKind kind;
+  Node *next;
   Node *lhs;
   Node *rhs;
   int val;    // on ND_NUM

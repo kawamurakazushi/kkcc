@@ -202,8 +202,16 @@ static Node *primary(Token **rest, Token *token)
 
 Node *parse(Token *token)
 {
-  Node *node = stmt(&token, token);
-  return node;
+  Node head = {};
+  Node *cur = &head;
+
+  while (token->kind != TK_EOF)
+  {
+    cur->next = stmt(&token, token);
+    cur = cur->next;
+  }
+
+  return head.next;
 }
 
 // test
@@ -211,7 +219,7 @@ static void check(Node *node)
 {
   if (node->kind == ND_NUM)
   {
-    printf("NUM: %d\n",node->val);
+    printf("NUM: %d\n", node->val);
     return;
   }
 
@@ -263,7 +271,6 @@ static void check(Node *node)
 
   printf("-- Done\n");
 }
-
 
 void test_parse()
 {
