@@ -10,6 +10,7 @@
 typedef enum
 {
   TK_RESERVED,
+  TK_IDENT,
   TK_NUM,
   TK_EOF,
 } TokenKind;
@@ -29,6 +30,7 @@ bool equal(Token *token, char *op);
 Token *skip(Token *token, char *op);
 long get_number(Token *token);
 Token *tokenize(char *p);
+void test_tokenize();
 
 // parse.c
 
@@ -43,6 +45,8 @@ typedef enum
   ND_LE,
   ND_EQ,
   ND_NE,
+  ND_LVAR,
+  ND_ASSIGN,
 } NodeKind;
 
 typedef struct Node Node;
@@ -51,7 +55,8 @@ struct Node
   NodeKind kind;
   Node *lhs;
   Node *rhs;
-  int val;
+  int val;    // on ND_NUM
+  int offset; // on ND_LVAR
 };
 
 Node *parse(Token *tok);

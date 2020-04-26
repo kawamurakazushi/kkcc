@@ -1,6 +1,5 @@
 #include "kkcc.h"
 
-
 // debug
 
 void comment_token(Token *token)
@@ -17,13 +16,16 @@ int main(int argc, char **argv)
 {
   if (argc != 2)
   {
-    fprintf(stderr, "引数の個数が正しくありません\n");
-    return 1;
+    printf("Running Test.....");
+    test_tokenize();
+    return 0;
   }
+  return 0;
 
   Token *token = tokenize(argv[1]);
   comment_token(token);
   Node *node = parse(token);
   codegen(node);
+
   return 0;
 }

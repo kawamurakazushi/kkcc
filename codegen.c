@@ -50,6 +50,10 @@ static void gen(Node *node)
     printf("  setle al\n");
     printf("  movzb rax, al\n");
     break;
+  case ND_LVAR:
+    break;
+  case ND_ASSIGN:
+    break;
   case ND_NUM:
     break;
   }

@@ -1,6 +1,8 @@
 #include "kkcc.h"
 
+static Node *stmt(Token **rest, Token *tok);
 static Node *expr(Token **rest, Token *tok);
+static Node *assign(Token **rest, Token *tok);
 static Node *equality(Token **rest, Token *tok);
 static Node *relational(Token **rest, Token *tok);
 static Node *add(Token **rest, Token *tok);
@@ -27,9 +29,40 @@ static Node *new_node_num(int val)
   return node;
 }
 
+static Node *new_node_var(char *str)
+{
+  Node *node = calloc(1, sizeof(Node));
+  node->kind = ND_LVAR;
+  node->offset = (str[0] - 'a' + 1) * 8;
+  return node;
+}
+
+static Node *stmt(Token **rest, Token *token)
+{
+  Node *node = expr(&token, token);
+  Token *t = skip(token, ";");
+  *rest = t;
+
+  return node;
+}
+
 static Node *expr(Token **rest, Token *token)
 {
-  return equality(rest, token);
+  return assign(rest, token);
+}
+
+// equality ("=" assign)?
+static Node *assign(Token **rest, Token *token)
+{
+  Node *node = equality(&token, token);
+
+  if (equal(token, "="))
+  {
+    node = new_node(ND_ASSIGN, node, assign(&token, token->next));
+  }
+
+  *rest = token;
+  return node;
 }
 
 // equality = relational ("==" relational | "!=" relational)*
@@ -142,6 +175,7 @@ static Node *unary(Token **rest, Token *token)
   return primary(rest, token);
 }
 
+// primary = "(" expr ")" | ident | num
 static Node *primary(Token **rest, Token *token)
 {
   for (;;)
@@ -155,7 +189,12 @@ static Node *primary(Token **rest, Token *token)
       return node;
     }
 
-    Node *node = new_node_num(get_number(token));
+    Node *node;
+
+    if (token->kind == TK_IDENT)
+      node = new_node_var(token->str);
+    else
+      node = new_node_num(get_number(token));
     *rest = token->next;
     return node;
   }
@@ -163,6 +202,6 @@ static Node *primary(Token **rest, Token *token)
 
 Node *parse(Token *token)
 {
-  Node *node = expr(&token, token);
+  Node *node = stmt(&token, token);
   return node;
 }

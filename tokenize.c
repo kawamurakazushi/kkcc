@@ -24,7 +24,7 @@ bool equal(Token *token, char *op)
 Token *skip(Token *token, char *op)
 {
   if (!equal(token, op))
-    error_at(token->str, "'%c'ではありません", op);
+    error_at(token->str, "'%s'ではありません", op);
 
   return token->next;
 }
@@ -83,7 +83,7 @@ Token *tokenize(char *p)
       continue;
     }
 
-    if (strchr("+-*/()><", *p))
+    if (strchr("=+-*/()><;", *p))
     {
       cur = new_token(TK_RESERVED, 1, cur, p++);
       continue;
@@ -98,10 +98,66 @@ Token *tokenize(char *p)
       continue;
     }
 
+    if ('a' <= *p && *p <= 'z')
+    {
+      cur = new_token(TK_IDENT, 1, cur, p++);
+      continue;
+    }
+
     error_at(p, "Invalid token.");
   }
 
   new_token(TK_EOF, 1, cur, p);
 
   return head.next;
+}
+
+// token
+
+char *token_to_string(TokenKind kind)
+{
+  switch (kind)
+  {
+  case TK_RESERVED:
+    return "Reserved";
+  case TK_IDENT:
+    return "Indentifier";
+  case TK_NUM:
+    return "Number";
+  case TK_EOF:
+    return "End of File";
+  default:
+    return "none";
+  }
+}
+
+void test_tokenize()
+{
+  Token *token = tokenize("1+1;a=2");
+  TokenKind expected[8] = {
+      TK_NUM,
+      TK_RESERVED,
+      TK_NUM,
+      TK_RESERVED,
+      TK_IDENT,
+      TK_RESERVED,
+      TK_NUM,
+      TK_EOF,
+  };
+
+  for (int i = 0; i < 8; i++)
+  {
+    if (expected[i] == token->kind)
+    {
+      printf("pass %s\n", token_to_string(expected[i]));
+      token = token->next;
+      continue;
+    }
+
+    printf("expected %s, got %s\n", token_to_string(expected[i]), token_to_string(token->kind));
+
+    exit(1);
+  }
+
+  printf("Tokenize test complete\n");
 }
