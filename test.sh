@@ -53,5 +53,7 @@ assert 50 'd=20+10*3;'
 
 assert 3 '1;2;3;'
 assert 20 'a=1;b=2;z=20;'
+assert 100 'abc=20;def=100;'
+assert 30 'b1=20;b3=30;'
 
 echo OK
