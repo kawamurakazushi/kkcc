@@ -12,6 +12,7 @@ typedef enum
   TK_RESERVED,
   TK_IDENT,
   TK_NUM,
+  TK_RETURN,
   TK_EOF,
 } TokenKind;
 
@@ -49,6 +50,7 @@ typedef enum
   ND_NE,
   ND_LVAR,
   ND_ASSIGN,
+  ND_RETURN,
 } NodeKind;
 
 typedef struct Node Node;

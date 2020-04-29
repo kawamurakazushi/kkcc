@@ -10,6 +10,15 @@ static Node *mul(Token **rest, Token *tok);
 static Node *unary(Token **rest, Token *tok);
 static Node *primary(Token **rest, Token *tok);
 
+static Node *new_unary(NodeKind kind, Node *expr)
+{
+  Node *node = calloc(1, sizeof(Node));
+  node->kind = kind;
+  node->lhs = expr;
+
+  return node;
+}
+
 static Node *new_node(NodeKind kind, Node *lhs, Node *rhs)
 {
   Node *node = calloc(1, sizeof(Node));
@@ -39,10 +48,18 @@ static Node *new_node_var(char *str)
 
 static Node *stmt(Token **rest, Token *token)
 {
-  Node *node = expr(&token, token);
+
+  Node *node;
+  if (equal(token, "return"))
+  {
+    node = new_unary(ND_RETURN, expr(&token, token->next));
+  }
+  else
+  {
+    node = expr(&token, token);
+  }
   Token *t = skip(token, ";");
   *rest = t;
-
   return node;
 }
 

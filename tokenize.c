@@ -95,6 +95,13 @@ Token *tokenize(char *p)
       continue;
     }
 
+    if ((strncmp(p, "return", 6) == 0 && !is_alnum(p[6])))
+    {
+      cur = new_token(TK_RESERVED, 6, cur, p);
+      p += 6;
+      continue;
+    }
+
     if (startswith(p, ">=") || startswith(p, "<=") ||
         startswith(p, "==") || startswith(p, "!="))
     {
